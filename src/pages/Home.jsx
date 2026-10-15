@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { QRCodeSVG } from 'qrcode.react';
 import {
+  LogIn,
   Bell,
   Flame,
   QrCode,
@@ -171,6 +173,16 @@ export default function Home() {
                 <Bell className="w-5 h-5" />
                 <span className="absolute top-2 right-2 w-2 h-2 bg-emerald-400 rounded-full shadow-[0_0_8px_#34D399] ring-2 ring-[#07090E]"></span>
               </button>
+
+              {/* Login / Auth Portal Link */}
+              <Link
+                to="/auth"
+                className="p-2.5 rounded-2xl bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 hover:text-emerald-400 border border-white/10 active:scale-95 transition-all duration-200 shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] flex items-center justify-center"
+                title="تسجيل الدخول / تبديل الحساب"
+                aria-label="بوابة الدخول وإنشاء الحساب"
+              >
+                <LogIn className="w-5 h-5" />
+              </Link>
             </div>
 
           </div>
