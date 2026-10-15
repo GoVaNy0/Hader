@@ -13,7 +13,6 @@ import {
   Trophy,
   Activity,
   FileText,
-  ExternalLink,
   ChevronLeft,
   X,
   CheckCircle2,
@@ -29,7 +28,8 @@ import {
   Camera,
   Check,
   SunMedium,
-  Lock
+  Lock,
+  ArrowUpRight
 } from 'lucide-react';
 
 export default function Home() {
@@ -59,7 +59,6 @@ export default function Home() {
     const timer = setInterval(() => {
       setQrCountdown((prev) => {
         if (prev <= 1) {
-          // Regenerate dynamic cryptographic attendance token
           const randomNonce = Math.floor(1000 + Math.random() * 9000);
           setQrToken(`HADER-20230894-SESSION-${randomNonce}`);
           return 30;
@@ -89,25 +88,21 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-[#07090E] text-slate-100 font-sans selection:bg-emerald-500 selection:text-white pb-32 md:pb-16 relative overflow-x-hidden" dir="rtl">
+    <div className="min-h-screen bg-[#070B12] text-slate-100 font-sans selection:bg-emerald-500 selection:text-white pb-24 lg:pb-12 relative overflow-x-hidden" dir="rtl">
       
       {/* =========================================================================
-          AMBIENT LIQUID BACKGROUND ORBS (DEEP GLOW BENEATH GLASS)
+          AMBIENT LIQUID BACKGROUND ORBS (SUBTLE HAILINE REFRACTIONS)
          ========================================================================= */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-        {/* Top-Right Emerald Bioluminescent Orb */}
-        <div className="absolute -top-24 -right-24 w-96 h-96 bg-emerald-500/15 rounded-full blur-[110px] animate-pulse" style={{ animationDuration: '8s' }}></div>
-        {/* Mid-Left Oceanic Teal Orb */}
-        <div className="absolute top-1/3 -left-32 w-80 h-80 bg-teal-500/12 rounded-full blur-[100px] animate-pulse" style={{ animationDuration: '10s' }}></div>
-        {/* Bottom-Right Deep Violet Refraction Orb */}
-        <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-violet-600/12 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '12s' }}></div>
-        {/* Center Ambient Subtle Grid Lines */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
+        <div className="absolute -top-32 -right-32 w-96 h-96 bg-emerald-500/10 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '9s' }}></div>
+        <div className="absolute top-1/2 -left-40 w-96 h-96 bg-teal-500/8 rounded-full blur-[130px] animate-pulse" style={{ animationDuration: '11s' }}></div>
+        <div className="absolute -bottom-20 right-1/4 w-80 h-80 bg-violet-600/8 rounded-full blur-[140px] animate-pulse" style={{ animationDuration: '13s' }}></div>
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
       </div>
 
       {/* Toast Alert Banner with Liquid Glass Effect */}
       {toastMessage && (
-        <div className="fixed top-5 left-1/2 -translate-x-1/2 z-50 w-11/12 max-w-md bg-slate-900/90 text-white px-4 py-3.5 rounded-2xl shadow-[0_10px_35px_rgba(0,0,0,0.6)] flex items-center gap-3 backdrop-blur-2xl transition-all duration-300 border border-emerald-500/30">
+        <div className="fixed top-5 left-1/2 -translate-x-1/2 z-50 w-11/12 max-w-md bg-[#0B0F17]/90 text-white px-4 py-3.5 rounded-2xl shadow-[0_10px_35px_rgba(0,0,0,0.7)] flex items-center gap-3 backdrop-blur-2xl transition-all duration-300 border border-emerald-500/30">
           <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/30">
             <CheckCircle2 className="w-4 h-4 text-emerald-400" />
           </div>
@@ -115,28 +110,29 @@ export default function Home() {
         </div>
       )}
 
-      {/* Main Container - Mobile First with Desktop Max Width */}
-      <div className="max-w-xl mx-auto px-4 pt-4 md:pt-8 space-y-4 md:space-y-6 relative z-10">
+      {/* =========================================================================
+          MAIN RESPONSIVE CONTAINER (Mobile-First to Desktop/Laptop)
+         ========================================================================= */}
+      <div className="max-w-md md:max-w-3xl lg:max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 md:pt-8 space-y-5 md:space-y-6 relative z-10">
 
         {/* =========================================================================
-            1. FLOATING GLASS HEADER
+            HEADER: FLOATING LIQUID GLASS BAR
            ========================================================================= */}
-        <header className="bg-white/[0.04] backdrop-blur-2xl rounded-3xl p-4 md:p-5 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.12)] transition-all duration-300 hover:border-white/20">
+        <header className="bg-white/[0.04] backdrop-blur-2xl rounded-3xl p-4 md:p-5 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] transition-all duration-300 hover:border-white/20">
           <div className="flex items-center justify-between gap-3">
             
             {/* Student Info */}
             <div className="flex items-center gap-3.5">
               <div className="relative">
-                <div className="w-13 h-13 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-700 text-white flex items-center justify-center font-bold text-lg shadow-[0_0_20px_rgba(16,185,129,0.3)] border border-emerald-400/30">
+                <div className="w-12 h-12 md:w-13 md:h-13 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-700 text-white flex items-center justify-center font-bold text-base md:text-lg shadow-[0_0_20px_rgba(16,185,129,0.3)] border border-emerald-400/30">
                   <span>JM</span>
                 </div>
-                {/* Bioluminescent Active Dot */}
-                <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-emerald-400 border-2 border-[#07090E] rounded-full shadow-[0_0_8px_#34D399]"></span>
+                <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-emerald-400 border-2 border-[#070B12] rounded-full shadow-[0_0_8px_#34D399]"></span>
               </div>
 
               <div>
                 <div className="flex items-center gap-1.5">
-                  <h1 className="text-lg md:text-xl font-bold text-white tracking-tight flex items-center gap-1.5">
+                  <h1 className="text-base md:text-xl font-bold text-white tracking-tight flex items-center gap-1.5">
                     أهلاً، جوفاني 👋
                   </h1>
                 </div>
@@ -151,11 +147,10 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Streak Badge & Notifications Bell */}
+            {/* Actions: Streak, Notifications, Login/Switch */}
             <div className="flex items-center gap-2">
-              {/* Luminous Amber Attendance Streak Badge */}
               <div 
-                className="bg-amber-500/10 hover:bg-amber-500/15 border border-amber-500/30 text-amber-300 px-3 py-1.5 rounded-2xl flex items-center gap-1.5 text-xs md:text-sm font-bold shadow-[0_0_15px_rgba(245,158,11,0.15)] cursor-pointer active:scale-95 transition-all"
+                className="bg-amber-500/10 hover:bg-amber-500/15 border border-amber-500/30 text-amber-300 px-3 py-1.5 rounded-2xl flex items-center gap-1.5 text-xs md:text-sm font-bold shadow-[0_0_15px_rgba(245,158,11,0.12)] cursor-pointer active:scale-95 transition-all"
                 title="أيام الالتزام المتتالية بالحضور"
                 onClick={() => triggerToast('أحسنت! 12 يوماً من الحضور والالتزام بدون أي غياب 🔥')}
               >
@@ -163,7 +158,6 @@ export default function Home() {
                 <span>12 يوم</span>
               </div>
 
-              {/* Frosted Glass Notification Bell */}
               <button
                 type="button"
                 onClick={() => setIsNotificationsOpen(true)}
@@ -171,10 +165,9 @@ export default function Home() {
                 aria-label="التنبيهات والإشعارات"
               >
                 <Bell className="w-5 h-5" />
-                <span className="absolute top-2 right-2 w-2 h-2 bg-emerald-400 rounded-full shadow-[0_0_8px_#34D399] ring-2 ring-[#07090E]"></span>
+                <span className="absolute top-2 right-2 w-2 h-2 bg-emerald-400 rounded-full shadow-[0_0_8px_#34D399] ring-2 ring-[#070B12]"></span>
               </button>
 
-              {/* Login / Auth Portal Link */}
               <Link
                 to="/auth"
                 className="p-2.5 rounded-2xl bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 hover:text-emerald-400 border border-white/10 active:scale-95 transition-all duration-200 shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] flex items-center justify-center"
@@ -189,401 +182,458 @@ export default function Home() {
         </header>
 
         {/* =========================================================================
-            2. THE LIVING GROWTH TREE CARD (GAMIFICATION HIGHLIGHT)
+            BENTO GRID ARCHITECTURE (Desktop & Tablet Split Layout)
+            - Order 1 on Mobile: Main Column (Hero Next Lecture, Quick Actions, Schedule)
+            - Order 2 on Mobile: Right Column (Compact Growth Tree, GPA & Stats, Library)
+            - On Desktop md/lg (dir="rtl"): Right Column (35%) sits on Right, Left/Main (65%) sits on Left
            ========================================================================= */}
-        <section className="relative overflow-hidden bg-gradient-to-b from-white/[0.06] via-white/[0.03] to-white/[0.02] backdrop-blur-2xl rounded-3xl p-5 md:p-6 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),0_12px_40px_rgba(0,0,0,0.5)] transition-all duration-300 group hover:border-emerald-500/30">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-5 lg:gap-6 items-start">
           
-          {/* Internal Bioluminescent Glow Center */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-emerald-500/15 rounded-full blur-[80px] pointer-events-none"></div>
-
-          {/* Card Header & Tree Level Info */}
-          <div className="flex items-start justify-between gap-3 relative z-10">
-            <div>
-              <div className="inline-flex items-center gap-1.5 bg-emerald-500/15 text-emerald-300 border border-emerald-400/30 px-3 py-1 rounded-xl text-xs font-bold mb-1.5 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
-                <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-                <span>المستوى 4 - شجرة مثمرة 🌳</span>
-              </div>
-              <h2 className="text-base md:text-lg font-bold text-white tracking-tight">
-                شجرة الحضور الأكاديمي
-              </h2>
-            </div>
-
-            <button
-              type="button"
-              onClick={() => setIsTreeInfoOpen(true)}
-              className="p-1.5 rounded-xl text-slate-400 hover:text-emerald-300 hover:bg-white/[0.06] transition-colors"
-              title="دليل شجرة النمو"
-            >
-              <Info className="w-5 h-5" />
-            </button>
-          </div>
-
-          {/* Centerpiece Vector Illustration: Living Bioluminescent Tree */}
-          <div className="py-4 flex flex-col items-center justify-center relative z-10">
-            <div className="relative w-48 h-48 flex items-center justify-center">
+          {/* =======================================================================
+              MAIN / LEFT COLUMN (Desktop 65% width)
+             ======================================================================= */}
+          <div className="order-1 md:order-2 md:col-span-7 lg:col-span-8 space-y-5">
+            
+            {/* -------------------------------------------------------------------
+                PRIORITY 1: UPCOMING LECTURE HERO (PROMOTED TO TOP POSITION)
+               ------------------------------------------------------------------- */}
+            <section className="relative overflow-hidden bg-white/[0.04] backdrop-blur-2xl rounded-3xl p-5 md:p-6 border border-emerald-500/25 shadow-[inset_0_1px_1px_rgba(255,255,255,0.12),0_12px_40px_rgba(0,0,0,0.45)] hover:border-emerald-500/40 transition-all duration-300 group">
               
-              {/* Organic Soft Radiance */}
-              <div className="absolute inset-0 bg-emerald-500/20 rounded-full filter blur-2xl scale-75 animate-pulse" style={{ animationDuration: '4s' }}></div>
+              {/* Internal Bioluminescent Refraction */}
+              <div className="absolute top-0 left-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-[80px] pointer-events-none"></div>
 
-              {/* Dynamic SVG Tree Graphic */}
-              <svg 
-                viewBox="0 0 200 200" 
-                className="w-full h-full drop-shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-transform duration-500 group-hover:scale-105"
-                fill="none" 
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                {/* Island Pedestal Base */}
-                <ellipse cx="100" cy="180" rx="64" ry="12" fill="#111827" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
-                <ellipse cx="100" cy="177" rx="52" ry="8" fill="#1F2937" />
-                <ellipse cx="100" cy="175" rx="40" ry="5.5" fill="#059669" fillOpacity="0.8" />
+              {/* Top Meta Row: Live Status & Department Pill */}
+              <div className="flex items-center justify-between gap-2 mb-3.5 relative z-10">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center shadow-[0_0_12px_rgba(16,185,129,0.25)]">
+                    <Calendar className="w-4 h-4" />
+                  </div>
+                  <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">
+                    المحاضرة القادمة
+                  </span>
+                </div>
 
-                {/* Tree Trunk with Illuminated Bioluminescent Sap Channel */}
-                <path 
-                  d="M93 175 C94 140 88 120 85 105 C83 95 86 85 92 80 C95 86 98 88 103 88 C108 84 107 72 114 68 C112 78 116 85 120 90 C114 105 108 135 107 175 Z" 
-                  fill="#451A03" 
-                  stroke="#78350F"
-                  strokeWidth="1.5"
-                />
-                
-                {/* Glowing Emerald Sap Vein Inside Trunk */}
-                <path d="M98 172 C99 145 95 120 98 95" stroke="#34D399" strokeWidth="2.5" strokeLinecap="round" className="animate-pulse" />
-
-                {/* Layered Foliage Clusters */}
-                <circle cx="100" cy="72" r="32" fill="#065F46" />
-                <circle cx="76" cy="78" r="26" fill="#047857" />
-                <circle cx="124" cy="80" r="26" fill="#047857" />
-                <circle cx="90" cy="50" r="24" fill="#059669" />
-                <circle cx="114" cy="54" r="22" fill="#059669" />
-                <circle cx="100" cy="62" r="18" fill="#10B981" />
-
-                {/* Bioluminescent Lantern Fruits */}
-                <circle cx="78" cy="74" r="5" fill="#F59E0B" filter="drop-shadow(0 0 6px #F59E0B)" />
-                <circle cx="122" cy="72" r="5" fill="#F59E0B" filter="drop-shadow(0 0 6px #F59E0B)" />
-                <circle cx="95" cy="46" r="5" fill="#34D399" filter="drop-shadow(0 0 6px #34D399)" />
-                <circle cx="112" cy="48" r="5" fill="#F59E0B" filter="drop-shadow(0 0 6px #F59E0B)" />
-                <circle cx="98" cy="78" r="4.5" fill="#34D399" filter="drop-shadow(0 0 6px #34D399)" />
-                <circle cx="68" cy="90" r="4" fill="#F59E0B" filter="drop-shadow(0 0 4px #F59E0B)" />
-                <circle cx="132" cy="88" r="4" fill="#34D399" filter="drop-shadow(0 0 4px #34D399)" />
-
-                {/* Floating Spores */}
-                <circle cx="145" cy="52" r="2.5" fill="#6EE7B7" className="animate-ping" style={{ animationDuration: '3s' }} />
-                <circle cx="60" cy="60" r="2" fill="#FBBF24" className="animate-ping" style={{ animationDuration: '4s' }} />
-              </svg>
-
-              {/* Current Points Floating Glass Badge */}
-              <div className="absolute bottom-2 bg-[#0B0F17]/85 backdrop-blur-md text-slate-200 text-[11px] font-bold px-3 py-1 rounded-full shadow-[0_4px_15px_rgba(0,0,0,0.5)] border border-white/10 flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_6px_#34D399]"></span>
-                <span>425 / 500 نقطة نمو</span>
+                <div className="flex items-center gap-1.5">
+                  <span className="inline-flex items-center gap-1.5 text-[11px] font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-400/30 px-2.5 py-1 rounded-full shadow-[0_0_12px_rgba(16,185,129,0.2)]">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span>تبدأ بعد 25 دقيقة</span>
+                  </span>
+                </div>
               </div>
-            </div>
 
-            {/* Stage Path Mini Dots */}
-            <div className="flex items-center gap-1.5 mt-2">
-              {[
-                { lvl: 1, name: 'بذرة' },
-                { lvl: 2, name: 'شتلة' },
-                { lvl: 3, name: 'شجيرة' },
-                { lvl: 4, name: 'مزهرة' },
-                { lvl: 5, name: 'مثمرة' }
-              ].map((s) => (
-                <button
-                  key={s.lvl}
-                  onClick={() => {
-                    setSelectedTreeLevel(s.lvl);
-                    triggerToast(`المرحلة ${s.lvl}: ${s.name} (${s.lvl === 4 ? 'مرحلتك الحالية' : s.lvl < 4 ? 'مكتملة' : 'المرحلة القادمة'})`);
-                  }}
-                  className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all ${
-                    s.lvl === 4 
-                      ? 'bg-emerald-500/25 text-emerald-300 border border-emerald-400/40 shadow-[0_0_10px_rgba(16,185,129,0.3)]' 
-                      : s.lvl < 4 
-                      ? 'bg-white/[0.05] text-slate-300 border border-white/5' 
-                      : 'bg-white/[0.02] text-slate-500 border border-transparent'
-                  }`}
-                >
-                  {s.name}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Liquid Progress Bar & Micro-Copy */}
-          <div className="space-y-2 mt-2 relative z-10">
-            <div className="flex items-center justify-between text-xs font-semibold">
-              <span className="text-slate-300">التقدم نحو المستوى القادم (شجرة مثمرة)</span>
-              <span className="text-emerald-400 font-bold font-mono">75%</span>
-            </div>
-
-            {/* Liquid Glass Trough with Neon Emerald Fill */}
-            <div className="w-full h-3.5 bg-black/40 rounded-full overflow-hidden p-0.5 border border-white/10 shadow-[inset_0_1px_3px_rgba(0,0,0,0.8)]">
-              <div 
-                className="h-full bg-gradient-to-l from-emerald-400 via-teal-400 to-emerald-500 rounded-full transition-all duration-700 relative shadow-[0_0_12px_rgba(16,185,129,0.6)]"
-                style={{ width: '75%' }}
-              >
-                <div className="absolute inset-0 bg-white/25 animate-pulse"></div>
-              </div>
-            </div>
-
-            {/* Motivational Micro-Copy */}
-            <p className="text-xs text-slate-400 text-center font-medium pt-1">
-              🌱 <span className="text-emerald-300 font-semibold">حضورك اليوم هيزود نمو شجرتك</span> ويثبت أحقيتك في صدارة القسم!
-            </p>
-          </div>
-
-        </section>
-
-        {/* =========================================================================
-            3. PRIMARY QUICK ACTIONS (LIQUID GLASS PILL BUTTONS)
-           ========================================================================= */}
-        <section className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          
-          {/* Main Attendance QR Button */}
-          <button
-            type="button"
-            onClick={() => setIsQrModalOpen(true)}
-            className="group relative overflow-hidden bg-gradient-to-r from-emerald-500/20 via-emerald-500/10 to-teal-500/20 hover:from-emerald-500/30 hover:to-teal-500/30 text-emerald-200 p-4 rounded-3xl border border-emerald-400/40 shadow-[0_0_25px_rgba(16,185,129,0.2),inset_0_1px_1px_rgba(255,255,255,0.15)] active:scale-95 transition-all duration-300 flex items-center justify-between text-right"
-          >
-            <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform shadow-[0_0_15px_rgba(16,185,129,0.3)]">
-                <QrCode className="w-6 h-6 text-emerald-300" />
-              </div>
-              <div>
-                <span className="text-xs text-emerald-300/80 font-medium block">تسجيل الحضور الفوري</span>
-                <span className="text-base font-bold text-white block">كودي للحضور</span>
-              </div>
-            </div>
-            <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:-translate-x-1 transition-transform">
-              <ChevronLeft className="w-5 h-5 text-emerald-300" />
-            </div>
-          </button>
-
-          {/* Secondary Button: Scan Lecture QR (Lecturer / Student Leader) */}
-          <button
-            type="button"
-            onClick={() => setIsScannerModalOpen(true)}
-            className="group bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-slate-200 p-4 rounded-3xl shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] active:scale-95 transition-all duration-300 flex items-center justify-between text-right"
-          >
-            <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 rounded-2xl bg-white/[0.06] border border-white/10 flex items-center justify-center shrink-0 text-slate-300 group-hover:scale-105 transition-transform">
-                <ScanLine className="w-6 h-6 text-slate-200" />
-              </div>
-              <div>
-                <span className="text-base font-bold text-white block">تسجيل قاعة</span>
-                <span className="text-xs text-slate-400 font-medium block">خاص بمندوب الدفعة والمحاضر</span>
-              </div>
-            </div>
-            <div className="w-8 h-8 rounded-full bg-white/[0.04] border border-white/5 flex items-center justify-center group-hover:-translate-x-1 transition-transform">
-              <ChevronLeft className="w-5 h-5 text-slate-400" />
-            </div>
-          </button>
-
-        </section>
-
-        {/* =========================================================================
-            4. TODAY'S SCHEDULE & UP NEXT (BENTO GLASS CARD)
-           ========================================================================= */}
-        <section className="bg-white/[0.04] backdrop-blur-2xl rounded-3xl p-5 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] transition-all duration-300 space-y-4">
-          
-          {/* Section Header */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center shadow-[0_0_10px_rgba(16,185,129,0.2)]">
-                <Calendar className="w-4 h-4" />
-              </div>
-              <h2 className="text-base font-bold text-white">
-                المحاضرة القادمة
-              </h2>
-            </div>
-
-            <span className="text-xs bg-white/[0.06] text-slate-300 border border-white/10 font-semibold px-2.5 py-1 rounded-full flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span>قائمة اليوم: 3 محاضرات</span>
-            </span>
-          </div>
-
-          {/* Featured Upcoming Lecture Card */}
-          <div className="bg-gradient-to-r from-emerald-500/10 via-white/[0.03] to-transparent rounded-2xl p-4 border border-emerald-500/20 relative">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 mb-3">
-              <div>
-                <span className="text-xs font-bold text-emerald-300 bg-emerald-500/20 border border-emerald-400/30 px-2 py-0.5 rounded-md inline-block mb-1.5 shadow-[0_0_10px_rgba(16,185,129,0.2)]">
-                  تبدأ بعد 25 دقيقة
-                </span>
-                <h3 className="text-base md:text-lg font-bold text-white tracking-tight">
+              {/* Lecture Name & Professor */}
+              <div className="space-y-1 relative z-10">
+                <h2 className="text-lg md:text-2xl font-bold text-white tracking-tight leading-snug group-hover:text-emerald-300 transition-colors">
                   تصميم وإنتاج الوسائط المتعددة التعليمية
-                </h3>
-                <p className="text-xs md:text-sm text-slate-300 mt-0.5">
-                  المحاضر: <span className="font-semibold text-slate-100">أ.د / حسام الدين مصطفى</span>
+                </h2>
+                <p className="text-xs md:text-sm text-slate-300 flex items-center gap-1.5 pt-0.5">
+                  <GraduationCap className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>المحاضر: <strong className="font-semibold text-slate-100">أ.د / حسام الدين مصطفى</strong></span>
                 </p>
               </div>
 
-              {/* Time Pill */}
-              <div className="inline-flex items-center gap-1.5 text-xs font-bold bg-white/[0.08] text-slate-200 px-3 py-1.5 rounded-xl border border-white/10 shadow-sm self-start sm:self-auto">
-                <Clock className="w-3.5 h-3.5 text-emerald-400" />
-                <span>10:30 ص - 12:00 م</span>
-              </div>
-            </div>
-
-            {/* Hall & Lab Location */}
-            <div className="flex items-center justify-between pt-2.5 border-t border-white/10 text-xs">
-              <div className="flex items-center gap-1.5 text-slate-300">
-                <MapPin className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span className="font-medium">معمل الحاسب 3 • مبنى د • الدور الثاني</span>
-              </div>
-              <span className="text-emerald-300 font-bold bg-emerald-500/15 border border-emerald-400/30 px-2 py-0.5 rounded-md text-[11px]">
-                التسجيل متاح 🟢
-              </span>
-            </div>
-          </div>
-
-          {/* Department Schedule Change Notification Alert */}
-          <div className="bg-amber-500/10 border border-amber-500/25 rounded-2xl p-3 flex items-start gap-2.5 text-xs text-amber-200 shadow-[0_0_15px_rgba(245,158,11,0.08)]">
-            <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-            <div className="space-y-0.5">
-              <span className="font-bold text-amber-300 block">تنبيه تغيير قاعة اليوم:</span>
-              <p className="text-slate-300 leading-relaxed">
-                محاضرة <span className="text-amber-200 font-semibold">الذكاء الاصطناعي في التعليم</span> (12:30 م) تم نقلها استثنائياً إلى <span className="font-semibold underline text-amber-300">قاعة 302</span> بدلاً من المدرج المركزي.
-              </p>
-            </div>
-          </div>
-
-        </section>
-
-        {/* =========================================================================
-            5. BENTO STATS ROW (LIQUID REFRACTIONS)
-           ========================================================================= */}
-        <section className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          
-          {/* Card 1: Secret GPA Rank Card (Violet Refraction) */}
-          <div className="bg-gradient-to-br from-violet-500/10 via-white/[0.03] to-transparent backdrop-blur-2xl rounded-3xl p-4 border border-violet-500/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] flex flex-col justify-between hover:border-violet-500/40 transition-all duration-300">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold text-slate-400">ترتيبي بالقسم</span>
-              <div className="w-8 h-8 rounded-xl bg-violet-500/20 border border-violet-500/30 text-violet-300 flex items-center justify-center shadow-[0_0_12px_rgba(139,92,246,0.3)]">
-                <Trophy className="w-4 h-4" />
-              </div>
-            </div>
-
-            <div className="space-y-1">
-              <div className="text-2xl font-black text-white tracking-tight">
-                المركز #14
-              </div>
-              <p className="text-[11px] text-slate-400 font-medium">
-                من بين 100 طالب بالدفعة
-              </p>
-            </div>
-
-            <div className="mt-3 pt-2.5 border-t border-white/10 flex items-center justify-between text-[11px]">
-              <span className="text-violet-300 font-bold bg-violet-500/20 border border-violet-500/30 px-2 py-0.5 rounded-md">
-                أعلى 15% 🌟
-              </span>
-              <span className="text-slate-500 font-normal flex items-center gap-1">
-                <Lock className="w-3 h-3 text-slate-400" />
-                <span>مشفر وخاص</span>
-              </span>
-            </div>
-          </div>
-
-          {/* Card 2: Commitment Percentage Card (Emerald Bioluminescent Glow) */}
-          <div className="bg-gradient-to-br from-emerald-500/10 via-white/[0.03] to-transparent backdrop-blur-2xl rounded-3xl p-4 border border-emerald-500/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] flex flex-col justify-between hover:border-emerald-500/40 transition-all duration-300">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold text-slate-400">نسبة الالتزام التراكمية</span>
-              <div className="w-8 h-8 rounded-xl bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 flex items-center justify-center shadow-[0_0_12px_rgba(16,185,129,0.3)]">
-                <Activity className="w-4 h-4" />
-              </div>
-            </div>
-
-            <div className="space-y-1">
-              <div className="text-2xl font-black text-emerald-400 flex items-baseline gap-1 drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]">
-                <span>94%</span>
-                <span className="text-xs text-slate-400 font-normal">ممتاز</span>
-              </div>
-              <p className="text-[11px] text-slate-400 font-medium">
-                32 محاضرة حضرية • 2 غياب
-              </p>
-            </div>
-
-            <div className="mt-3 pt-2.5 border-t border-white/10 flex items-center justify-between text-[11px]">
-              <span className="text-slate-400">المسموح:</span>
-              <span className="font-semibold text-emerald-300">متبقي 4 غيابات</span>
-            </div>
-          </div>
-
-          {/* Card 3: Excuse Request Trigger */}
-          <div 
-            onClick={() => setIsExcuseModalOpen(true)}
-            className="bg-white/[0.04] hover:bg-white/[0.07] backdrop-blur-2xl rounded-3xl p-4 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] flex flex-col justify-between cursor-pointer active:scale-95 transition-all duration-300 group"
-          >
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold text-slate-400">تقديم عذر</span>
-              <div className="w-8 h-8 rounded-xl bg-blue-500/20 border border-blue-500/30 text-blue-300 flex items-center justify-center group-hover:scale-105 transition-transform shadow-[0_0_12px_rgba(59,130,246,0.3)]">
-                <FileText className="w-4 h-4" />
-              </div>
-            </div>
-
-            <div className="space-y-1">
-              <div className="text-base font-bold text-white group-hover:text-blue-300 transition-colors">
-                طلب عذر غياب
-              </div>
-              <p className="text-[11px] text-slate-400 font-medium leading-relaxed">
-                تقديم تقرير طبي أو عذر رسمي مباشرة للمحاضر
-              </p>
-            </div>
-
-            <div className="mt-3 pt-2.5 border-t border-white/10 flex items-center justify-between text-[11px] text-blue-400 font-bold">
-              <span>تقديم طلب جديد</span>
-              <span className="group-hover:-translate-x-1 transition-transform">←</span>
-            </div>
-          </div>
-
-        </section>
-
-        {/* =========================================================================
-            6. EXTERNAL COMPANION LINK CARD: STUDY NOTES PLATFORM
-           ========================================================================= */}
-        <section>
-          <a
-            href="https://drive.google.com" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="block group bg-white/[0.04] hover:bg-white/[0.07] backdrop-blur-2xl rounded-3xl p-4 md:p-5 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] hover:border-white/20 transition-all duration-300"
-          >
-            <div className="flex items-center justify-between gap-4">
-              <div className="flex items-center gap-3.5">
-                <div className="w-12 h-12 rounded-2xl bg-indigo-500/15 border border-indigo-500/30 text-indigo-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform shadow-[0_0_15px_rgba(99,102,241,0.25)]">
-                  <BookOpen className="w-6 h-6" />
-                </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h3 className="text-sm md:text-base font-bold text-white group-hover:text-indigo-300 transition-colors">
-                      مكتبة مذكرات وملخصات القسم
-                    </h3>
-                    <span className="text-[10px] bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 font-bold px-2 py-0.5 rounded-md">
-                      سحابي
-                    </span>
+              {/* Details Badges Grid (Time, Location, Status) */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-4 mt-4 border-t border-white/10 relative z-10 text-xs">
+                
+                {/* Time Slot */}
+                <div className="flex items-center gap-2 text-slate-200 bg-white/[0.03] border border-white/5 rounded-2xl p-2.5">
+                  <div className="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0">
+                    <Clock className="w-3.5 h-3.5" />
                   </div>
-                  <p className="text-xs text-slate-400 mt-0.5 leading-relaxed">
-                    بنك الأسئلة، مذكرات المقررات وسلايدات المحاضرات الرسمية للأسبوع 8
+                  <div className="space-y-0.5">
+                    <span className="text-[10px] text-slate-400 block font-medium">التوقيت</span>
+                    <span className="font-bold font-mono">10:30 ص - 12:00 م (90 دقيقة)</span>
+                  </div>
+                </div>
+
+                {/* Location Venue */}
+                <div className="flex items-center gap-2 text-slate-200 bg-white/[0.03] border border-white/5 rounded-2xl p-2.5">
+                  <div className="w-7 h-7 rounded-lg bg-teal-500/10 text-teal-400 flex items-center justify-center shrink-0">
+                    <MapPin className="w-3.5 h-3.5" />
+                  </div>
+                  <div className="space-y-0.5">
+                    <span className="text-[10px] text-slate-400 block font-medium">المكان</span>
+                    <span className="font-bold">معمل الحاسب 3 • مبنى د • الدور 2</span>
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Department Urgent Schedule Notice Banner */}
+              <div className="mt-3.5 bg-amber-500/10 border border-amber-500/25 rounded-2xl p-3 flex items-start gap-2.5 text-xs text-amber-200 relative z-10">
+                <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                <div className="space-y-0.5">
+                  <span className="font-bold text-amber-300 block">تنبيه تغيير قاعة اليوم:</span>
+                  <p className="text-slate-300 leading-relaxed text-[11px] md:text-xs">
+                    محاضرة <span className="text-amber-200 font-semibold">الذكاء الاصطناعي في التعليم</span> (12:30 م) تم نقلها استثنائياً إلى <span className="font-semibold underline text-amber-300">قاعة 302</span> بدلاً من المدرج المركزي.
                   </p>
                 </div>
               </div>
 
-              <div className="w-9 h-9 rounded-2xl bg-white/[0.06] border border-white/10 text-slate-300 flex items-center justify-center group-hover:bg-indigo-500 group-hover:text-white transition-all shrink-0 shadow-sm">
-                <ExternalLink className="w-4 h-4" />
+            </section>
+
+            {/* -------------------------------------------------------------------
+                PRIORITY 2: PRIMARY QUICK ACTIONS (1-TAP RAPID ACCESS)
+               ------------------------------------------------------------------- */}
+            <section className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              
+              {/* Main Attendance QR Button */}
+              <button
+                type="button"
+                onClick={() => setIsQrModalOpen(true)}
+                className="group relative overflow-hidden bg-gradient-to-r from-emerald-500/20 via-emerald-500/10 to-teal-500/20 hover:from-emerald-500/30 hover:to-teal-500/30 text-emerald-200 p-4 rounded-3xl border border-emerald-400/40 shadow-[0_0_25px_rgba(16,185,129,0.15),inset_0_1px_1px_rgba(255,255,255,0.15)] active:scale-98 transition-all duration-300 flex items-center justify-between text-right"
+              >
+                <div className="flex items-center gap-3.5">
+                  <div className="w-12 h-12 rounded-2xl bg-emerald-500/25 border border-emerald-400/40 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+                    <QrCode className="w-6 h-6 text-emerald-300" />
+                  </div>
+                  <div>
+                    <span className="text-xs text-emerald-300/80 font-medium block">تسجيل الحضور الفوري</span>
+                    <span className="text-base font-bold text-white block">كودي للحضور</span>
+                  </div>
+                </div>
+                <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:-translate-x-1 transition-transform">
+                  <ChevronLeft className="w-5 h-5 text-emerald-300" />
+                </div>
+              </button>
+
+              {/* Secondary Button: Scan Lecture Hall QR (Lecturer / Student Leader) */}
+              <button
+                type="button"
+                onClick={() => setIsScannerModalOpen(true)}
+                className="group bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-white/20 text-slate-200 p-4 rounded-3xl shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] active:scale-98 transition-all duration-300 flex items-center justify-between text-right"
+              >
+                <div className="flex items-center gap-3.5">
+                  <div className="w-12 h-12 rounded-2xl bg-white/[0.06] border border-white/10 flex items-center justify-center shrink-0 text-slate-300 group-hover:scale-105 transition-transform">
+                    <ScanLine className="w-6 h-6 text-slate-200" />
+                  </div>
+                  <div>
+                    <span className="text-base font-bold text-white block">تسجيل قاعة</span>
+                    <span className="text-xs text-slate-400 font-medium block">خاص بمندوب الدفعة والمحاضر</span>
+                  </div>
+                </div>
+                <div className="w-8 h-8 rounded-full bg-white/[0.04] border border-white/5 flex items-center justify-center group-hover:-translate-x-1 transition-transform">
+                  <ChevronLeft className="w-5 h-5 text-slate-400" />
+                </div>
+              </button>
+
+            </section>
+
+            {/* -------------------------------------------------------------------
+                PRIORITY 4: TODAY'S REMAINING SCHEDULE (جدول محاضرات اليوم)
+               ------------------------------------------------------------------- */}
+            <section className="bg-white/[0.04] backdrop-blur-2xl rounded-3xl p-5 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] transition-all duration-300 space-y-3.5">
+              
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center">
+                    <Calendar className="w-4 h-4" />
+                  </div>
+                  <h3 className="text-sm md:text-base font-bold text-white">
+                    جدول محاضرات اليوم (الخميس)
+                  </h3>
+                </div>
+
+                <span className="text-xs bg-white/[0.06] text-slate-300 border border-white/10 font-semibold px-2.5 py-1 rounded-full flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span>3 محاضرات مجدولة</span>
+                </span>
               </div>
+
+              {/* Timeline Items List */}
+              <div className="space-y-2.5 pt-1">
+                
+                {/* Lecture 1: Upcoming / Active */}
+                <div className="p-3.5 rounded-2xl bg-emerald-500/[0.08] border border-emerald-500/25 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 hover:border-emerald-500/40 transition-colors">
+                  <div className="flex items-start gap-3">
+                    <div className="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center justify-center shrink-0 mt-0.5">
+                      <Clock className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs md:text-sm font-bold text-white">تصميم وإنتاج الوسائط المتعددة</span>
+                        <span className="text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 px-2 py-0.5 rounded-md font-bold">
+                          المحاضرة القادمة
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-slate-400 mt-0.5">
+                        أ.د / حسام الدين مصطفى • معمل الحاسب 3 (مبنى د)
+                      </p>
+                    </div>
+                  </div>
+                  <div className="text-left sm:text-left self-start sm:self-center font-mono text-xs font-bold text-emerald-300 bg-emerald-500/15 px-2.5 py-1 rounded-lg border border-emerald-500/20">
+                    10:30 ص - 12:00 م
+                  </div>
+                </div>
+
+                {/* Lecture 2: Afternoon */}
+                <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 hover:bg-white/[0.04] transition-colors">
+                  <div className="flex items-start gap-3">
+                    <div className="w-9 h-9 rounded-xl bg-white/[0.05] text-slate-300 border border-white/10 flex items-center justify-center shrink-0 mt-0.5">
+                      <Clock className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs md:text-sm font-bold text-slate-200">الذكاء الاصطناعي في التعليم</span>
+                        <span className="text-[10px] bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded-md font-bold">
+                          قاعة 302 ⚠️
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-slate-400 mt-0.5">
+                        د / مروة كامل • مبنى د
+                      </p>
+                    </div>
+                  </div>
+                  <div className="text-left sm:text-left self-start sm:self-center font-mono text-xs font-medium text-slate-400 bg-white/[0.04] px-2.5 py-1 rounded-lg">
+                    12:30 م - 02:00 م
+                  </div>
+                </div>
+
+                {/* Lecture 3: Later */}
+                <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 hover:bg-white/[0.04] transition-colors">
+                  <div className="flex items-start gap-3">
+                    <div className="w-9 h-9 rounded-xl bg-white/[0.05] text-slate-300 border border-white/10 flex items-center justify-center shrink-0 mt-0.5">
+                      <Clock className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs md:text-sm font-bold text-slate-300">تطبيقات الواقع الافتراضي والمعزز</span>
+                      </div>
+                      <p className="text-[11px] text-slate-400 mt-0.5">
+                        د / تامر فؤاد • المدرج المركزي 2
+                      </p>
+                    </div>
+                  </div>
+                  <div className="text-left sm:text-left self-start sm:self-center font-mono text-xs font-medium text-slate-400 bg-white/[0.04] px-2.5 py-1 rounded-lg">
+                    02:15 م - 03:45 م
+                  </div>
+                </div>
+
+              </div>
+
+            </section>
+
+          </div>
+
+          {/* =======================================================================
+              RIGHT COLUMN (Desktop 35% width)
+              - Compact Growth Tree mini-widget
+              - Quick GPA / Attendance metrics
+              - Companion study library shortcut
+             ======================================================================= */}
+          <div className="order-2 md:order-1 md:col-span-5 lg:col-span-4 space-y-5">
+            
+            {/* -------------------------------------------------------------------
+                PRIORITY 3: COMPACT GROWTH TREE (LOW-PROFILE MINI-WIDGET)
+               ------------------------------------------------------------------- */}
+            <section className="bg-white/[0.04] backdrop-blur-2xl rounded-3xl p-4 md:p-5 border border-white/10 hover:border-emerald-500/30 transition-all duration-300 shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] group">
+              
+              {/* Top Row: Mini Glowing Badge & Level Header */}
+              <div className="flex items-center justify-between gap-3 mb-3">
+                <div className="flex items-center gap-3">
+                  {/* Miniature Glowing Tree Icon Container */}
+                  <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-emerald-500/25 to-teal-700/20 border border-emerald-400/30 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(16,185,129,0.25)] group-hover:scale-105 transition-transform">
+                    <span className="text-xl">🌳</span>
+                  </div>
+
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[10px] bg-emerald-500/15 text-emerald-300 border border-emerald-400/30 px-2 py-0.5 rounded-md font-bold">
+                        المستوى 4
+                      </span>
+                      <span className="text-xs font-bold text-white">شجرة مثمرة</span>
+                    </div>
+                    <span className="text-[11px] text-slate-400 block mt-0.5 font-medium">
+                      واحة الحضور الأكاديمي
+                    </span>
+                  </div>
+                </div>
+
+                {/* Info Guide Trigger */}
+                <button
+                  type="button"
+                  onClick={() => setIsTreeInfoOpen(true)}
+                  className="p-1.5 rounded-xl text-slate-400 hover:text-emerald-300 hover:bg-white/[0.06] transition-colors"
+                  title="دليل شجرة النمو"
+                >
+                  <Info className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Miniature Progress Bar & Points */}
+              <div className="space-y-1.5 bg-white/[0.02] border border-white/5 rounded-2xl p-3">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-slate-400 text-[11px] font-medium">التقدم نحو المستوى 5</span>
+                  <span className="text-emerald-400 font-bold font-mono">75%</span>
+                </div>
+
+                {/* Progress Trough */}
+                <div className="w-full h-2.5 bg-black/40 rounded-full overflow-hidden p-0.5 border border-white/10 shadow-[inset_0_1px_2px_rgba(0,0,0,0.8)]">
+                  <div 
+                    className="h-full bg-gradient-to-l from-emerald-400 via-teal-400 to-emerald-500 rounded-full transition-all duration-700 relative shadow-[0_0_8px_rgba(16,185,129,0.5)]"
+                    style={{ width: '75%' }}
+                  >
+                    <div className="absolute inset-0 bg-white/20 animate-pulse"></div>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between text-[11px] text-slate-400 pt-0.5">
+                  <span className="font-mono text-emerald-300 font-bold">425 / 500 نقطة</span>
+                  <span className="text-slate-500">متبقي 75 نقطة</span>
+                </div>
+              </div>
+
+              {/* Clean Navigation Button */}
+              <button
+                type="button"
+                onClick={() => setIsTreeInfoOpen(true)}
+                className="w-full mt-3 py-2 px-3 rounded-2xl bg-white/[0.04] hover:bg-white/[0.08] text-slate-200 hover:text-emerald-300 border border-white/10 text-xs font-bold transition-all flex items-center justify-center gap-1.5 group/btn"
+              >
+                <span>عرض واحة الشجرة بالكامل</span>
+                <span className="group-hover/btn:-translate-x-1 transition-transform">←</span>
+              </button>
+
+            </section>
+
+            {/* -------------------------------------------------------------------
+                QUICK GPA & ATTENDANCE METRICS
+               ------------------------------------------------------------------- */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-3.5">
+              
+              {/* Metric 1: GPA Department Rank */}
+              <div className="bg-gradient-to-br from-violet-500/10 via-white/[0.03] to-transparent backdrop-blur-2xl rounded-3xl p-4 border border-violet-500/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] flex flex-col justify-between hover:border-violet-500/40 transition-all duration-300">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-bold text-slate-400">ترتيبي بالقسم</span>
+                  <div className="w-8 h-8 rounded-xl bg-violet-500/20 border border-violet-500/30 text-violet-300 flex items-center justify-center shadow-[0_0_12px_rgba(139,92,246,0.25)]">
+                    <Trophy className="w-4 h-4" />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <div className="text-2xl font-black text-white tracking-tight">
+                    المركز #14
+                  </div>
+                  <p className="text-[11px] text-slate-400 font-medium">
+                    من بين 100 طالب بالدفعة
+                  </p>
+                </div>
+
+                <div className="mt-3 pt-2.5 border-t border-white/10 flex items-center justify-between text-[11px]">
+                  <span className="text-violet-300 font-bold bg-violet-500/20 border border-violet-500/30 px-2 py-0.5 rounded-md">
+                    أعلى 15% 🌟
+                  </span>
+                  <span className="text-slate-500 font-normal flex items-center gap-1">
+                    <Lock className="w-3 h-3 text-slate-400" />
+                    <span>مشفر وخاص</span>
+                  </span>
+                </div>
+              </div>
+
+              {/* Metric 2: Attendance Commitment */}
+              <div className="bg-gradient-to-br from-emerald-500/10 via-white/[0.03] to-transparent backdrop-blur-2xl rounded-3xl p-4 border border-emerald-500/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] flex flex-col justify-between hover:border-emerald-500/40 transition-all duration-300">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-bold text-slate-400">نسبة الالتزام التراكمية</span>
+                  <div className="w-8 h-8 rounded-xl bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 flex items-center justify-center shadow-[0_0_12px_rgba(16,185,129,0.25)]">
+                    <Activity className="w-4 h-4" />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <div className="text-2xl font-black text-emerald-400 flex items-baseline gap-1 drop-shadow-[0_0_8px_rgba(52,211,153,0.3)]">
+                    <span>94%</span>
+                    <span className="text-xs text-slate-400 font-normal">ممتاز</span>
+                  </div>
+                  <p className="text-[11px] text-slate-400 font-medium">
+                    32 محاضرة حضرية • 2 غياب
+                  </p>
+                </div>
+
+                <div className="mt-3 pt-2.5 border-t border-white/10 flex items-center justify-between text-[11px]">
+                  <span className="text-slate-400">المسموح:</span>
+                  <span className="font-semibold text-emerald-300">متبقي 4 غيابات</span>
+                </div>
+              </div>
+
+              {/* Action Card: Excuse Request Trigger */}
+              <div 
+                onClick={() => setIsExcuseModalOpen(true)}
+                className="bg-white/[0.04] hover:bg-white/[0.07] backdrop-blur-2xl rounded-3xl p-4 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] flex flex-col justify-between cursor-pointer active:scale-98 transition-all duration-300 group hover:border-blue-500/40"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-bold text-slate-400">تقديم عذر</span>
+                  <div className="w-8 h-8 rounded-xl bg-blue-500/20 border border-blue-500/30 text-blue-300 flex items-center justify-center group-hover:scale-105 transition-transform shadow-[0_0_12px_rgba(59,130,246,0.25)]">
+                    <FileText className="w-4 h-4" />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <div className="text-sm font-bold text-white group-hover:text-blue-300 transition-colors">
+                    طلب عذر غياب رسمي
+                  </div>
+                  <p className="text-[11px] text-slate-400 font-medium leading-relaxed">
+                    إرسال تقرير طبي أو إفادة معتمدة مباشرة لأستاذ المادة
+                  </p>
+                </div>
+
+                <div className="mt-3 pt-2.5 border-t border-white/10 flex items-center justify-between text-[11px] text-blue-400 font-bold">
+                  <span>تقديم طلب عذر جديد</span>
+                  <span className="group-hover:-translate-x-1 transition-transform">←</span>
+                </div>
+              </div>
+
             </div>
-          </a>
-        </section>
+
+            {/* -------------------------------------------------------------------
+                COMPANION STUDY LIBRARY SHORTCUT
+               ------------------------------------------------------------------- */}
+            <a
+              href="https://drive.google.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="block group bg-white/[0.04] hover:bg-white/[0.07] backdrop-blur-2xl rounded-3xl p-4 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] hover:border-indigo-500/40 transition-all duration-300"
+            >
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-2xl bg-indigo-500/15 border border-indigo-500/30 text-indigo-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform shadow-[0_0_15px_rgba(99,102,241,0.2)]">
+                    <BookOpen className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <h4 className="text-xs md:text-sm font-bold text-white group-hover:text-indigo-300 transition-colors">
+                        مكتبة ملخصات القسم
+                      </h4>
+                      <span className="text-[9px] bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 font-bold px-1.5 py-0.5 rounded-md">
+                        سحابي
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-400 mt-0.5 leading-relaxed">
+                      سلايدات، مذكرات المقررات وبنك الأسئلة للأسبوع 8
+                    </p>
+                  </div>
+                </div>
+
+                <div className="w-8 h-8 rounded-xl bg-white/[0.05] border border-white/10 text-slate-400 flex items-center justify-center group-hover:bg-indigo-500 group-hover:text-white transition-all shrink-0">
+                  <ArrowUpRight className="w-4 h-4" />
+                </div>
+              </div>
+            </a>
+
+          </div>
+
+        </div>
 
       </div>
 
       {/* =========================================================================
-          7. FLOATING LIQUID BOTTOM DOCK (MOBILE TAB BAR)
+          FLOATING LIQUID BOTTOM DOCK (Clean on Mobile, Gracefully Pinned)
          ========================================================================= */}
       <nav 
-        className="fixed bottom-3 inset-x-4 max-w-md mx-auto z-40 bg-[#0B0F17]/75 backdrop-blur-2xl border border-white/10 rounded-full px-3 py-2 shadow-[0_10px_35px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.15)]"
+        className="fixed bottom-3 inset-x-4 max-w-md mx-auto z-40 bg-[#0B0F17]/80 backdrop-blur-2xl border border-white/10 rounded-full px-3 py-2 shadow-[0_10px_35px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.15)]"
         aria-label="شريط التنقل السفلي"
       >
         <div className="flex items-center justify-between px-1">
           
-          {/* Item 1: Home (الرئيسية) */}
+          {/* Item 1: Home */}
           <button
             type="button"
             onClick={() => setActiveTab('home')}
@@ -599,7 +649,7 @@ export default function Home() {
             <span className="text-[10px]">الرئيسية</span>
           </button>
 
-          {/* Item 2: Schedule (الجدول) */}
+          {/* Item 2: Schedule */}
           <button
             type="button"
             onClick={() => {
@@ -631,7 +681,7 @@ export default function Home() {
             <span className="text-[10px] font-bold text-emerald-300 mt-1">كود الحضور</span>
           </button>
 
-          {/* Item 4: Excuses (الأعذار) */}
+          {/* Item 4: Excuses */}
           <button
             type="button"
             onClick={() => {
@@ -650,7 +700,7 @@ export default function Home() {
             <span className="text-[10px]">الأعذار</span>
           </button>
 
-          {/* Item 5: Profile (الملف الشخصي) */}
+          {/* Item 5: Profile */}
           <button
             type="button"
             onClick={() => {
@@ -798,13 +848,11 @@ export default function Home() {
             {/* Simulated Camera Viewfinder */}
             <div className="relative aspect-square bg-black flex items-center justify-center overflow-hidden">
               <div className="w-56 h-56 border border-emerald-500/40 rounded-3xl relative flex items-center justify-center">
-                {/* Corner Frame Brackets */}
                 <span className="absolute -top-1 -right-1 w-6 h-6 border-t-4 border-r-4 border-emerald-400 rounded-tr-lg shadow-[0_0_10px_#10B981]"></span>
                 <span className="absolute -top-1 -left-1 w-6 h-6 border-t-4 border-l-4 border-emerald-400 rounded-tl-lg shadow-[0_0_10px_#10B981]"></span>
                 <span className="absolute -bottom-1 -right-1 w-6 h-6 border-b-4 border-r-4 border-emerald-400 rounded-br-lg shadow-[0_0_10px_#10B981]"></span>
                 <span className="absolute -bottom-1 -left-1 w-6 h-6 border-b-4 border-l-4 border-emerald-400 rounded-bl-lg shadow-[0_0_10px_#10B981]"></span>
 
-                {/* Animated Horizontal Laser Scan Line */}
                 <div className="absolute inset-x-2 h-0.5 bg-gradient-to-r from-transparent via-emerald-400 to-transparent shadow-[0_0_14px_#10B981] animate-pulse"></div>
 
                 <p className="text-xs text-slate-400 text-center px-4 font-medium">
@@ -1067,11 +1115,11 @@ export default function Home() {
                   <span className="font-mono text-slate-500">251 - 400 نقطة</span>
                 </div>
                 <div className="flex items-center justify-between font-bold text-emerald-300 bg-emerald-500/15 border border-emerald-400/30 px-2 py-1 rounded-lg">
-                  <span>المستوى 4: شجرة مزهرة (أنت هنا)</span>
+                  <span>المستوى 4: شجرة مثمرة (أنت هنا)</span>
                   <span className="font-mono">401 - 500 نقطة</span>
                 </div>
                 <div className="flex items-center justify-between font-medium">
-                  <span>المستوى 5: شجرة مثمرة وشهادة تميز</span>
+                  <span>المستوى 5: شجرة وارفة وشهادة تميز</span>
                   <span className="font-mono text-slate-500">+500 نقطة</span>
                 </div>
               </div>
