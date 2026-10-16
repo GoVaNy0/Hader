@@ -650,23 +650,16 @@ export default function Home() {
           </button>
 
           {/* Item 2: Schedule */}
-          <button
-            type="button"
-            onClick={() => {
-              setActiveTab('schedule');
-              triggerToast('عرض جدول المحاضرات الأسبوعي الكامل');
-            }}
-            className={`flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all ${
-              activeTab === 'schedule' 
-                ? 'text-emerald-400 font-bold' 
-                : 'text-slate-400 hover:text-slate-200 font-medium'
-            }`}
+          <Link
+            to="/schedule"
+            className="flex flex-col items-center gap-1 py-1 px-3 rounded-2xl text-slate-400 hover:text-emerald-400 font-medium transition-all"
+            title="جدول المحاضرات الأكاديمي"
           >
-            <div className={`p-1.5 rounded-xl ${activeTab === 'schedule' ? 'bg-emerald-500/20 text-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.3)]' : ''}`}>
+            <div className="p-1.5 rounded-xl hover:bg-emerald-500/20 hover:text-emerald-400 transition-colors">
               <Calendar className="w-5 h-5" />
             </div>
             <span className="text-[10px]">الجدول</span>
-          </button>
+          </Link>
 
           {/* Center Floating Neon Emerald Pill: Attendance QR */}
           <button
