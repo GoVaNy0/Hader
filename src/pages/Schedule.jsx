@@ -21,40 +21,43 @@ import {
   LogIn
 } from 'lucide-react';
 import { scheduleData } from '../data/scheduleData';
-// oxlint-disable-next-line react/only-export-components
-export { scheduleData };
 
+// ONLY the 3 active university attendance days for Educational Technology - 2nd Year
 const daysList = [
-  { key: 'sunday', label: 'الأحد', shortLabel: 'أحد' },
-  { key: 'monday', label: 'الإثنين', shortLabel: 'إثنين' },
-  { key: 'tuesday', label: 'الثلاثاء', shortLabel: 'ثلاثاء' },
-  { key: 'wednesday', label: 'الأربعاء', shortLabel: 'أربعاء' },
-  { key: 'thursday', label: 'الخميس', shortLabel: 'خميس' }
+  { key: 'saturday', label: 'السبت', shortLabel: 'سبت', tag: 'بداية الأسبوع' },
+  { key: 'sunday', label: 'الأحد', shortLabel: 'أحد', tag: 'يوم تطبيقي' },
+  { key: 'wednesday', label: 'الأربعاء', shortLabel: 'أربعاء', tag: 'المحاضرات الأساسية' }
 ];
 
 export default function Schedule() {
-  // Helper to determine today's day key in Egyptian university week
-  const getTodayKey = () => {
-    const dayIndex = new Date().getDay(); // 0 is Sunday, 1 is Monday ... 4 is Thursday
-    switch (dayIndex) {
-      case 0: return 'sunday';
-      case 1: return 'monday';
-      case 2: return 'tuesday';
-      case 3: return 'wednesday';
-      case 4: return 'thursday';
-      default: return 'sunday'; // Friday & Saturday defaults to Sunday
-    }
-  };
+  const [selectedDay, setSelectedDay] = useState(() => {
+    const day = typeof window !== 'undefined' ? new Date().getDay() : 6;
+    if (day === 6) return 'saturday';
+    if (day === 0) return 'sunday';
+    if (day === 3) return 'wednesday';
+    if (day === 1 || day === 2) return 'wednesday';
+    return 'saturday';
+  });
 
-  const [selectedDay, setSelectedDay] = useState(getTodayKey);
+  const [currentAttendanceDay] = useState(() => {
+    const day = typeof window !== 'undefined' ? new Date().getDay() : 6;
+    if (day === 6) return 'saturday';
+    if (day === 0) return 'sunday';
+    if (day === 3) return 'wednesday';
+    return null;
+  });
+
+  const isDayCurrentlyToday = (dayKey) => {
+    return currentAttendanceDay === dayKey;
+  };
   const [searchQuery, setSearchQuery] = useState('');
-  const [filterType, setFilterType] = useState('all'); // 'all' | 'lecture' | 'lab'
+  const [filterType, setFilterType] = useState('all'); // 'all' | 'theory' | 'practical'
   const [toastMessage, setToastMessage] = useState(null);
 
   // QR Attendance Modal State
   const [isQrModalOpen, setIsQrModalOpen] = useState(false);
   const [selectedLectureForQr, setSelectedLectureForQr] = useState(null);
-  const [qrCountdown, setQrCountdown] = useState(26);
+  const [qrCountdown, setQrCountdown] = useState(24);
   const [qrToken, setQrToken] = useState('HADER-20230894-SESSION-8842');
 
   // Countdown timer effect for QR rotation
@@ -80,10 +83,22 @@ export default function Schedule() {
   };
 
   const handleSelectToday = () => {
-    const today = getTodayKey();
-    setSelectedDay(today);
-    const dayLabel = daysList.find(d => d.key === today)?.label;
-    triggerToast(`تم الانتقال إلى جدول اليوم (${dayLabel}) 📅`);
+    const day = new Date().getDay();
+    if (day === 6) {
+      setSelectedDay('saturday');
+      triggerToast('تم الانتقال إلى جدول اليوم (السبت) 📅');
+    } else if (day === 0) {
+      setSelectedDay('sunday');
+      triggerToast('تم الانتقال إلى جدول اليوم (الأحد) 📅');
+    } else if (day === 3) {
+      setSelectedDay('wednesday');
+      triggerToast('تم الانتقال إلى جدول اليوم (الأربعاء) 📅');
+    } else {
+      const nextDay = getSmartInitialDay();
+      setSelectedDay(nextDay);
+      const nextLabel = daysList.find(d => d.key === nextDay)?.label;
+      triggerToast(`اليوم عطلة أكاديمية، تم الانتقال إلى أقرب يوم حضور (${nextLabel}) 🌿`);
+    }
   };
 
   const openQrForLecture = (lecture) => {
@@ -98,14 +113,22 @@ export default function Schedule() {
       const matchesSearch =
         item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.doctor.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.location.toLowerCase().includes(searchQuery.toLowerCase());
+        item.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.type.toLowerCase().includes(searchQuery.toLowerCase());
+
+      const isPractical =
+        item.status === 'معمل' ||
+        item.type.includes('تطبيقات') ||
+        item.type.includes('معمل') ||
+        item.type.includes('سكشن') ||
+        item.type.includes('تدريب');
 
       const matchesType =
         filterType === 'all'
           ? true
-          : filterType === 'lab'
-          ? item.venueType === 'معمل' || item.type.includes('معمل') || item.type.includes('سكشن')
-          : item.venueType === 'مدرج' || item.venueType === 'قاعة';
+          : filterType === 'practical'
+          ? isPractical
+          : !isPractical;
 
       return matchesSearch && matchesType;
     });
@@ -114,23 +137,25 @@ export default function Schedule() {
   const currentDayStats = useMemo(() => {
     const lectures = scheduleData[selectedDay] || [];
     const count = lectures.length;
-    const labsCount = lectures.filter(l => l.venueType === 'معمل' || l.type.includes('معمل') || l.type.includes('سكشن')).length;
-    const hallsCount = count - labsCount;
-    return { count, labsCount, hallsCount };
+    const practicalCount = lectures.filter(
+      l => l.status === 'معمل' || l.type.includes('تطبيقات') || l.type.includes('معمل') || l.type.includes('سكشن') || l.type.includes('تدريب')
+    ).length;
+    const theoryCount = count - practicalCount;
+    return { count, practicalCount, theoryCount };
   }, [selectedDay]);
 
-  const isToday = selectedDay === getTodayKey();
+  const activeDayIsToday = isDayCurrentlyToday(selectedDay);
 
   return (
     <div className="min-h-screen bg-[#070B12] text-slate-100 font-sans selection:bg-emerald-500 selection:text-white pb-24 lg:pb-12 relative overflow-x-hidden" dir="rtl">
       
       {/* =========================================================================
-          AMBIENT LIQUID BACKGROUND ORBS (DARK OBSIDIAN & EMERALD REFRACTIONS)
+          AMBIENT LIQUID BACKGROUND ORBS (DARK OBSIDIAN & BIOLUMINESCENT GLOW)
          ========================================================================= */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
         <div className="absolute -top-32 -right-32 w-96 h-96 bg-emerald-500/10 rounded-full blur-[130px] animate-pulse" style={{ animationDuration: '9s' }}></div>
-        <div className="absolute top-1/2 -left-40 w-96 h-96 bg-cyan-500/8 rounded-full blur-[130px] animate-pulse" style={{ animationDuration: '11s' }}></div>
-        <div className="absolute -bottom-20 right-1/3 w-80 h-80 bg-teal-500/8 rounded-full blur-[140px] animate-pulse" style={{ animationDuration: '13s' }}></div>
+        <div className="absolute top-1/2 -left-40 w-96 h-96 bg-teal-500/8 rounded-full blur-[130px] animate-pulse" style={{ animationDuration: '11s' }}></div>
+        <div className="absolute -bottom-20 right-1/3 w-80 h-80 bg-cyan-600/8 rounded-full blur-[140px] animate-pulse" style={{ animationDuration: '13s' }}></div>
         <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
       </div>
 
@@ -145,12 +170,12 @@ export default function Schedule() {
       )}
 
       {/* =========================================================================
-          MAIN CONTAINER
+          MAIN CONTAINER (Mobile-First to Desktop/Laptop)
          ========================================================================= */}
       <div className="max-w-md md:max-w-3xl lg:max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 md:pt-8 space-y-5 md:space-y-6 relative z-10">
 
         {/* =======================================================================
-            TOP NAVIGATION & HEADER BAR
+            HEADER BAR
            ======================================================================= */}
         <header className="bg-white/[0.04] backdrop-blur-2xl rounded-3xl p-4 md:p-5 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] transition-all duration-300 hover:border-white/20">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -172,17 +197,17 @@ export default function Schedule() {
                     جدول المحاضرات الأكاديمي
                   </h1>
                   <span className="text-[10px] bg-emerald-500/15 text-emerald-300 border border-emerald-400/30 px-2 py-0.5 rounded-md font-bold">
-                    معتمد
+                    معتمد رسمياً
                   </span>
                 </div>
                 <p className="text-xs text-slate-400 mt-0.5 flex items-center gap-1.5 font-medium">
                   <GraduationCap className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                  <span>قسم تكنولوجيا التعليم • الفصل الدراسي الأول • الفرقة 3</span>
+                  <span>قسم تكنولوجيا التعليم • الفرقة الثانية • الفصل الدراسي الأول</span>
                 </p>
               </div>
             </div>
 
-            {/* Quick Actions (Today Button & Semester Tag) */}
+            {/* Quick Actions (Today Button & Auth Link) */}
             <div className="flex items-center gap-2.5 self-end sm:self-auto">
               <button
                 type="button"
@@ -190,7 +215,7 @@ export default function Schedule() {
                 className="px-3.5 py-2 rounded-2xl bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-400/30 text-xs font-bold transition-all flex items-center gap-1.5 shadow-[0_0_15px_rgba(16,185,129,0.15)] active:scale-95"
               >
                 <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-                <span>اليوم ({daysList.find(d => d.key === getTodayKey())?.label})</span>
+                <span>أيام الحضور (3 أيام)</span>
               </button>
 
               <Link
@@ -206,13 +231,14 @@ export default function Schedule() {
         </header>
 
         {/* =======================================================================
-            DAY SWITCHER TABS (GLASS HORIZONTAL PILL DOCK)
+            DAY SWITCHER TABS (EXACTLY 3 ACTIVE ATTENDANCE DAYS)
+            [السبت, الأحد, الأربعاء]
            ======================================================================= */}
         <section className="bg-white/[0.04] backdrop-blur-2xl rounded-3xl p-2.5 md:p-3 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)]">
-          <div className="grid grid-cols-5 gap-1.5 sm:gap-2">
+          <div className="grid grid-cols-3 gap-2 sm:gap-3">
             {daysList.map((day) => {
               const isSelected = selectedDay === day.key;
-              const isCurrentDay = day.key === getTodayKey();
+              const isToday = isDayCurrentlyToday(day.key);
               const lecturesCount = (scheduleData[day.key] || []).length;
 
               return (
@@ -220,26 +246,36 @@ export default function Schedule() {
                   key={day.key}
                   type="button"
                   onClick={() => setSelectedDay(day.key)}
-                  className={`relative py-3 px-1 sm:px-3 rounded-2xl font-bold transition-all duration-300 flex flex-col items-center justify-center gap-1 ${
+                  className={`relative py-3.5 px-2 sm:px-4 rounded-2xl font-bold transition-all duration-300 flex flex-col items-center justify-center gap-1.5 ${
                     isSelected
-                      ? 'bg-gradient-to-b from-emerald-500/25 to-teal-500/15 text-white border border-emerald-400/50 shadow-[0_0_20px_rgba(16,185,129,0.25),inset_0_1px_1px_rgba(255,255,255,0.2)]'
+                      ? 'bg-gradient-to-b from-emerald-500/25 to-teal-500/15 text-white border border-emerald-400/50 shadow-[0_0_25px_rgba(16,185,129,0.25),inset_0_1px_1px_rgba(255,255,255,0.2)]'
                       : 'bg-white/[0.02] hover:bg-white/[0.06] text-slate-400 hover:text-slate-200 border border-transparent'
                   }`}
                 >
-                  {/* Active / Current day indicator dot */}
-                  {isCurrentDay && (
-                    <span className="absolute top-1.5 left-1.5 sm:left-2 w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_6px_#34D399]"></span>
+                  {/* Today live indicator dot */}
+                  {isToday && (
+                    <span className="absolute top-2 left-2 sm:left-3 w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#34D399] animate-pulse"></span>
                   )}
 
-                  <span className="text-xs sm:text-sm tracking-tight">{day.label}</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-sm sm:text-base tracking-tight">{day.label}</span>
+                    {isToday && (
+                      <span className="text-[10px] bg-emerald-400/20 text-emerald-300 px-1.5 py-0.2 rounded-md font-bold hidden sm:inline-block">
+                        اليوم
+                      </span>
+                    )}
+                  </div>
 
-                  <span className={`text-[10px] px-1.5 py-0.2 rounded-md ${
-                    isSelected
-                      ? 'bg-emerald-400/20 text-emerald-300 border border-emerald-400/30'
-                      : 'text-slate-500'
-                  }`}>
-                    {lecturesCount > 0 ? `${lecturesCount} محاضرات` : 'عطلة'}
-                  </span>
+                  <div className="flex items-center gap-1.5 text-[10px] sm:text-xs">
+                    <span className={`px-2 py-0.5 rounded-md font-semibold ${
+                      isSelected
+                        ? 'bg-emerald-400/20 text-emerald-300 border border-emerald-400/30'
+                        : 'text-slate-400 bg-white/[0.03]'
+                    }`}>
+                      {lecturesCount} محاضرات
+                    </span>
+                    <span className="text-slate-500 hidden md:inline">• {day.tag}</span>
+                  </div>
                 </button>
               );
             })}
@@ -247,14 +283,14 @@ export default function Schedule() {
         </section>
 
         {/* =======================================================================
-            DAY SUMMARY & SEARCH / FILTER TOOLBAR (BENTO ROW)
+            DAY OVERVIEW & SEARCH / FILTER TOOLBAR (BENTO ROW)
            ======================================================================= */}
         <section className="grid grid-cols-1 md:grid-cols-12 gap-3.5">
           
           {/* Day Overview Summary Card */}
           <div className="md:col-span-5 bg-white/[0.04] backdrop-blur-2xl rounded-3xl p-4 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center shrink-0">
                 <Calendar className="w-5 h-5" />
               </div>
               <div>
@@ -262,17 +298,14 @@ export default function Schedule() {
                   <h2 className="text-sm md:text-base font-bold text-white">
                     جدول يوم {daysList.find(d => d.key === selectedDay)?.label}
                   </h2>
-                  {isToday && (
+                  {activeDayIsToday && (
                     <span className="text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 px-2 py-0.5 rounded-full font-bold">
                       اليوم
                     </span>
                   )}
                 </div>
                 <p className="text-[11px] text-slate-400 mt-0.5">
-                  {currentDayStats.count > 0 
-                    ? `إجمالي: ${currentDayStats.count} محاضرات (${currentDayStats.labsCount} معامل • ${currentDayStats.hallsCount} قاعات)`
-                    : 'لا توجد محاضرات مجدولة لهذا اليوم'
-                  }
+                  إجمالي {currentDayStats.count} محاضرات ({currentDayStats.practicalCount} معمل وتطبيقات • {currentDayStats.theoryCount} مدرجات وقاعات)
                 </p>
               </div>
             </div>
@@ -288,7 +321,7 @@ export default function Schedule() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="ابحث بالمادة، الأستاذ أو القاعة..."
+                placeholder="ابحث بالمادة، الدكتور أو القاعة..."
                 className="w-full bg-white/[0.05] border border-white/10 rounded-2xl pr-9 pl-3 py-2 text-xs text-slate-100 placeholder:text-slate-500 focus:outline-hidden focus:border-emerald-500/50 font-medium transition-all"
               />
               {searchQuery && (
@@ -306,8 +339,8 @@ export default function Schedule() {
             <div className="flex items-center gap-1.5 w-full sm:w-auto shrink-0 justify-end">
               {[
                 { id: 'all', label: 'الكل' },
-                { id: 'lecture', label: 'مدرجات/قاعات' },
-                { id: 'lab', label: 'معامل/سكاشن' }
+                { id: 'theory', label: 'نظري/مدرجات' },
+                { id: 'practical', label: 'معامل/تطبيقات' }
               ].map((f) => (
                 <button
                   key={f.id}
@@ -329,15 +362,19 @@ export default function Schedule() {
         </section>
 
         {/* =======================================================================
-            LECTURES TIMELINE CARDS
+            LECTURES BENTO TIMELINE CARDS
            ======================================================================= */}
         <section className="space-y-4">
           
           {filteredLectures.length > 0 ? (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {filteredLectures.map((lecture, index) => {
-                const isFirst = index === 0 && isToday;
-                const isLab = lecture.venueType === 'معمل';
+                const isFirst = index === 0 && activeDayIsToday;
+                const isLab =
+                  lecture.status === 'معمل' ||
+                  lecture.type.includes('معمل') ||
+                  lecture.type.includes('تطبيقات') ||
+                  lecture.location.includes('معمل');
 
                 return (
                   <div
@@ -348,10 +385,10 @@ export default function Schedule() {
                         : 'border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)]'
                     }`}
                   >
-                    {/* Top Accent Gradient Wash on Hover */}
+                    {/* Top Accent Gradient Line on Hover */}
                     <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-emerald-500/0 via-emerald-400/30 to-emerald-500/0 opacity-0 group-hover:opacity-100 transition-opacity"></div>
 
-                    {/* Header Row: Timing Pill & Status */}
+                    {/* Header Row: Timing & Badges */}
                     <div className="flex items-center justify-between gap-2 mb-3">
                       <div className="flex items-center gap-2">
                         {/* Time Badge */}
@@ -360,23 +397,22 @@ export default function Schedule() {
                           <span>{lecture.time}</span>
                         </div>
 
-                        {lecture.duration && (
-                          <span className="text-[10px] text-slate-400 bg-white/[0.03] px-2 py-0.5 rounded-md border border-white/5">
-                            {lecture.duration}
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Type and Status Pill */}
-                      <div className="flex items-center gap-1.5">
-                        <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${
+                        {/* Status tag */}
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md border ${
                           isLab
                             ? 'bg-teal-500/15 text-teal-300 border-teal-500/30'
                             : 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
                         }`}>
+                          {lecture.status === 'معمل' ? 'معمل تطبيقي 💻' : 'قائمة بموعدها ✅'}
+                        </span>
+                      </div>
+
+                      {/* Course Type Badge */}
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-white/[0.06] text-slate-300 border border-white/10">
                           {lecture.type}
                         </span>
-                        
+
                         {isFirst && (
                           <span className="inline-flex items-center gap-1 text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 px-2 py-0.5 rounded-full animate-pulse">
                             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
@@ -401,21 +437,21 @@ export default function Schedule() {
                       </span>
                     </div>
 
-                    {/* Location Venue */}
+                    {/* Location Venue & Quick Attendance Trigger */}
                     <div className="flex items-center justify-between gap-3 pt-3.5 mt-3.5 border-t border-white/10 text-xs">
                       <div className="flex items-center gap-2 text-slate-300">
                         <MapPin className="w-4 h-4 text-emerald-400 shrink-0" />
                         <span className="font-medium text-slate-200">{lecture.location}</span>
                       </div>
 
-                      {/* Quick QR Attendance Trigger for this specific lecture */}
+                      {/* Quick QR Attendance Button */}
                       <button
                         type="button"
                         onClick={() => openQrForLecture(lecture)}
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-400/30 text-[11px] font-bold transition-all shadow-[0_0_10px_rgba(16,185,129,0.15)] active:scale-95 shrink-0"
                       >
                         <QrCode className="w-3.5 h-3.5" />
-                        <span>تسجيل حضور</span>
+                        <span>كود الحضور</span>
                       </button>
                     </div>
 
@@ -425,7 +461,7 @@ export default function Schedule() {
             </div>
           ) : (
             /* ===================================================================
-               EMPTY STATE FOR THURSDAY / VACATION / NO SEARCH MATCHES
+               EMPTY STATE FOR SEARCH FILTER MISSES
                =================================================================== */
             <div className="bg-white/[0.03] backdrop-blur-2xl rounded-3xl p-8 md:p-12 border border-white/10 text-center space-y-4 shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)]">
               <div className="w-16 h-16 rounded-3xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mx-auto shadow-[0_0_20px_rgba(16,185,129,0.2)]">
@@ -434,41 +470,24 @@ export default function Schedule() {
 
               <div className="space-y-1.5 max-w-md mx-auto">
                 <h3 className="text-base md:text-lg font-bold text-white">
-                  {searchQuery 
-                    ? 'لم يتم العثور على محاضرات تطابق بحثك' 
-                    : selectedDay === 'thursday' 
-                    ? 'يوم الخميس: عطلة أكاديمية ومشاريع حرة 🌴' 
-                    : 'لا توجد محاضرات مجدولة لهذا اليوم'
-                  }
+                  لم يتم العثور على محاضرات تطابق هذا البحث
                 </h3>
                 <p className="text-xs md:text-sm text-slate-400 leading-relaxed">
-                  {searchQuery
-                    ? 'جرب البحث باسم مادة أخرى أو تأكد من اختيار اليوم المناسب من القائمة بالأعلى.'
-                    : selectedDay === 'thursday'
-                    ? 'مخصص لإعداد مشاريع المقررات العملية، والعمل الجماعي في معامل تكنولوجيا التعليم والبحث الميداني.'
-                    : 'استمتع بوقتك واستعد لمحاضرات الأيام القادمة!'
-                  }
+                  تأكد من كتابة اسم المقرر أو المحاضر بشكل صحيح، أو أعد ضبط شريط التصفية بالأعلى.
                 </p>
               </div>
 
               <div className="flex items-center justify-center gap-3 pt-2">
-                {searchQuery ? (
-                  <button
-                    type="button"
-                    onClick={() => setSearchQuery('')}
-                    className="px-4 py-2 rounded-2xl bg-white/[0.06] hover:bg-white/[0.1] text-slate-200 border border-white/10 text-xs font-bold transition-all"
-                  >
-                    إلغاء البحث
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => setSelectedDay('sunday')}
-                    className="px-4 py-2 rounded-2xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-400/40 text-xs font-bold transition-all shadow-[0_0_15px_rgba(16,185,129,0.2)]"
-                  >
-                    عرض جدول يوم الأحد
-                  </button>
-                )}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearchQuery('');
+                    setFilterType('all');
+                  }}
+                  className="px-4 py-2 rounded-2xl bg-white/[0.06] hover:bg-white/[0.1] text-slate-200 border border-white/10 text-xs font-bold transition-all"
+                >
+                  إعادة ضبط البحث
+                </button>
               </div>
             </div>
           )}
@@ -581,7 +600,7 @@ export default function Schedule() {
               </button>
             </div>
 
-            {/* Modal Body: High Contrast Scannable White Card Container */}
+            {/* Modal Body */}
             <div className="p-6 flex flex-col items-center text-center space-y-4">
               
               {/* Dynamic Countdown Pill */}
@@ -618,8 +637,8 @@ export default function Schedule() {
                   <span className="font-mono text-emerald-400">#20230894</span>
                 </div>
                 <div className="flex justify-between text-slate-400 text-[11px]">
-                  <span>تكنولوجيا التعليم • عام</span>
-                  <span>{selectedLectureForQr ? selectedLectureForQr.location : 'جلسة اليوم'}</span>
+                  <span>تكنولوجيا التعليم • الفرقة 2</span>
+                  <span>{selectedLectureForQr ? selectedLectureForQr.location : 'جلسة الحضور'}</span>
                 </div>
               </div>
 
@@ -643,7 +662,7 @@ export default function Schedule() {
                 onClick={() => {
                   setIsQrModalOpen(false);
                   setSelectedLectureForQr(null);
-                  triggerToast('تم تسجيل الحضور بنجاح ✅');
+                  triggerToast('تم تأكيد الحضور بنجاح ✅');
                 }}
                 className="flex-1 bg-emerald-500 hover:bg-emerald-600 text-[#07090E] py-2.5 rounded-2xl text-xs font-bold transition-all shadow-[0_0_15px_rgba(16,185,129,0.3)]"
               >
